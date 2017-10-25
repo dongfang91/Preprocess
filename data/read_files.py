@@ -1,4 +1,9 @@
 from collections import OrderedDict
+import sys
+if sys.version_info[0]==2:
+    import cPickle as pickle
+else:
+    import pickle
 import pickle
 import h5py
 import os
@@ -12,7 +17,10 @@ def save_in_pickle(file,array):
 
 def read_from_pickle(file):
     with open(file+'.txt', 'rb') as handle:
-        b = pickle.loads(handle.read())
+        if sys.version_info[0] == 2:
+            b = pickle.loads(handle.read())
+        else:
+            b = pickle.loads(handle.read(),encoding='latin1')
     return b
 
 
