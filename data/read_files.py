@@ -10,6 +10,16 @@ import os
 import json
 import shutil
 import numpy as np
+import csv
+
+def read_from_tsv(filename):
+    with open('data/'+filename, 'r') as mycsvfile:
+        files = csv.reader(mycsvfile,delimiter='\t')
+        dataset = list()
+        for row in files:
+            dataset.append(row)
+    return dataset
+
 
 def save_in_pickle(file,array):
     with open(file+'.txt', 'wb') as handle:
