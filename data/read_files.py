@@ -64,24 +64,23 @@ def movefiles(old_address,new_address,dir_simples,abbr):
         i+=1
 
 def load_h5py_data(filename):
-    with h5py.File('data/'+ filename + '.hdf5', 'r') as hf:
+    data = list()
+    with h5py.File( filename + '.hdf5', 'r') as hf:
         print("List of arrays in this file: \n", hf.keys())
-        x = hf.get('input')
-        y = hf.get('output')
-        x_data = np.array(x)
-        #n_patterns = x_data.shape[0]
-        y_data = np.array(y)
-        # print x_data[0][1000:1100]
-        # print y_data[0][1000:1100]
-        #y_data = y_data.reshape(y_data.shape+(1,))
-        print x_data.shape
-        print y_data.shape
+        for key in hf.keys():
+            x = hf.get(key)
+            x_data = np.array(x)
+            print x_data.shape
+            del x
+            data.append(x_data)
 
+    return data
 
-    del x
-    del y
-    return x_data,y_data
-
+def save_h5py_data(filename,input_names,inputs,data_format):
+    f = h5py.File(filename+".hdf5", "w")
+    for inut_index in range(len(input)):
+        dset_char = f.create_dataset(input_names[inut_index], data=inputs[inut_index], dtype=data_format[inut_index])
+        
 def index2vector(y, nb_classes=None):
     y = np.array(y, dtype='int').ravel()
     if not nb_classes:
@@ -95,21 +94,6 @@ def index2vector(y, nb_classes=None):
         if y1[item]==-1:
             categorical[item]  = np.zeros(nb_classes)
     return categorical
-
-def load_single_input(filename):
-    with h5py.File('data/'+ filename + '.hdf5', 'r') as hf:
-        print("List of arrays in this file: \n", hf.keys())
-        x = hf.get('input')
-
-        x_data = np.array(x)
-        #n_patterns = x_data.shape[0]
-
-        # print x_data[0][1000:1100]
-        # print y_data[0][1000:1100]
-        #y_data = y_data.reshape(y_data.shape+(1,))
-        print x_data.shape
-    del x
-    return x_data
 
 def counterList2Dict (counter_list):
     dict_new = dict()
